@@ -3,9 +3,9 @@
 .PHONY: dev prod stop install clean help
 
 # Variables
-VENV = ../.venv
-PYTHON = $(VENV)/bin/python
-UVICORN = $(VENV)/bin/uvicorn
+POETRY = poetry
+PYTHON = poetry run python
+UVICORN = poetry run uvicorn
 
 help: ## Afficher cette aide
 	@echo "🎯 Commandes disponibles pour Targetym AI Backend:"
@@ -32,7 +32,7 @@ stop: ## Arrêter le backend
 
 install: ## Installer les dépendances
 	@echo "📦 Installation des dépendances..."
-	@$(VENV)/bin/pip install -r requirements.txt
+	@poetry install
 
 clean: ## Nettoyer les fichiers temporaires
 	@echo "🧹 Nettoyage..."

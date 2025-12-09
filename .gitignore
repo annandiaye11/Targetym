@@ -49,6 +49,26 @@ coverage/
 .env
 .env.local
 .env.production
+
+# Build outputs
+.next/
+dist/
+build/
+out/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+
+# Clerk development files
+.clerk/
+.env.production
 .env.development
 
 # Next.js

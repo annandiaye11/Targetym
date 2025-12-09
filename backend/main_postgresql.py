@@ -13,6 +13,7 @@ from jose import jwt
 from dotenv import load_dotenv
 import psycopg2
 from psycopg2.extras import RealDictCursor
+from clerk_webhooks import router as clerk_router
 
 # Charger les variables d'environnement
 load_dotenv()
@@ -47,6 +48,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Inclure les routes Clerk
+app.include_router(clerk_router, tags=["Clerk Webhooks"])
 
 # Pydantic models
 class UserCreate(BaseModel):

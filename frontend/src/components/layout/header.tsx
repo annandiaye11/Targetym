@@ -3,9 +3,8 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { cn } from '@/lib/utils'
-import { useAuth } from '@/contexts/AuthContext'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import { SignedIn, SignedOut, UserButton, SignInButton, SignUpButton, useUser } from '@clerk/nextjs'
+import { Bars3Icon, XMarkIcon, UserCircleIcon } from '@heroicons/react/24/outline'
 
 const publicNavigation = [
   { name: 'Solutions', href: '/solutions' },
@@ -20,208 +19,169 @@ const authenticatedNavigation = [
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const pathname = usePathname()
-  const { user, isAuthenticated, logout } = useAuth()
+  const { isSignedIn, user } = useUser()
   
-  // Choisir la navigation selon l'état d'authentification
-  const navigation = isAuthenticated ? authenticatedNavigation : publicNavigation
+  // Navigation selon l'état d'authentification
+  const navigation = isSignedIn ? authenticatedNavigation : publicNavigation
 
   return (
-    <header className="bg-white shadow-sm border-b relative z-50">
-      {/* Special announcement banner */}
-      <div className="bg-primary-600 px-4 py-2 text-center">
+    <header className="bg-white shadow-sm border-b sticky top-0 z-50">
+      {/* Bannière d'annonce */}
+      <div className="bg-blue-600 px-4 py-2 text-center">
         <p className="text-sm text-white">
-          <span className="font-medium">✨ Maintenant avec Analytique IA</span>
+          <span className="font-medium">✨ Nouvelle authentification avec Clerk</span>
         </p>
       </div>
-      <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Top">
-        <div className="flex w-full items-center justify-between border-b border-primary-500 py-6 lg:border-none">
+
+      <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center py-6">
+          {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-600 text-white font-bold">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-white font-bold">
                 T
               </div>
-              <div className="flex flex-col">
-                <span className="text-lg font-bold text-gray-900">Targetym AI</span>
-                <span className="text-xs text-primary-600 font-medium">HR Analytics</span>
-              </div>
+              <span className="text-xl font-bold text-gray-900">
+                Targetym <span className="text-blue-600">AI</span>
+              </span>
             </Link>
           </div>
 
-          <div className="ml-10 hidden space-x-8 lg:block">
-            {navigation.map((link) => (
+          {/* Navigation Desktop */}
+          <div className="hidden lg:flex lg:items-center lg:space-x-8">
+            {navigation.map((item) => (
               <Link
-                key={link.name}
-                href={link.href}
-                className={cn(
-                  "text-base font-medium transition-colors",
-                  pathname === link.href
-                    ? "text-primary-600"
-                    : "text-gray-500 hover:text-gray-900"
-                )}
+                key={item.name}
+                href={item.href}
+                className={`text-base font-medium transition-colors ${
+                  pathname === item.href
+                    ? 'text-blue-600 border-b-2 border-blue-600 pb-1'
+                    : 'text-gray-500 hover:text-gray-900'
+                }`}
               >
-                {link.name}
+                {item.name}
               </Link>
             ))}
           </div>
 
-          <div className="ml-6 flex items-center space-x-4">
-            {isAuthenticated ? (
-              <>
-                <div className="flex items-center space-x-3">
-                  <div className="text-right hidden sm:block">
-                    <p className="text-sm font-medium text-gray-900">
-                      {user?.first_name} {user?.last_name}
-                    </p>
-                    <p className="text-xs text-gray-500">{user?.email}</p>
-                  </div>
-                  <div className="h-8 w-8 bg-primary-100 rounded-full flex items-center justify-center">
-                    <span className="text-primary-600 font-medium text-sm">
-                      {user?.first_name?.[0]}{user?.last_name?.[0]}
-                    </span>
-                  </div>
+          {/* Actions utilisateur */}
+          <div className="flex items-center space-x-4">
+            {/* Utilisateur connecté */}
+            <SignedIn>
+              <div className="flex items-center space-x-3">
+                <div className="text-right hidden sm:block">
+                  <p className="text-sm font-medium text-gray-900">
+                    {user?.firstName} {user?.lastName}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {user?.emailAddresses[0]?.emailAddress}
+                  </p>
                 </div>
-                <button
-                  onClick={logout}
-                  className="text-base font-medium text-gray-500 hover:text-gray-900"
-                >
-                  Déconnexion
-                </button>
-              </>
-            ) : (
-              <>
-                <Link
-                  href="/auth/login"
-                  className="text-base font-medium text-gray-500 hover:text-gray-900"
-                >
-                  Connexion
-                </Link>
                 <Link 
-                  href="/auth/signup"
-                  className="rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white hover:bg-primary-700 transition-colors"
+                  href="/profile"
+                  className="flex items-center space-x-2 px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                 >
-                  Essai Gratuit
+                  <UserCircleIcon className="h-5 w-5" />
+                  <span className="hidden sm:inline">Mon Profil</span>
                 </Link>
-              </>
-            )}
-          </div>
-
-          <div className="ml-6 lg:hidden">
-            <button
-              onClick={() => setMobileMenuOpen(true)}
-              className="p-2 text-gray-500 hover:text-gray-900 transition-colors"
-              aria-label="Ouvrir le menu"
-            >
-              <Bars3Icon className="h-6 w-6" aria-hidden="true" />
-            </button>
-          </div>
-        </div>
-
-        <div className="flex flex-wrap justify-center gap-x-6 py-4 lg:hidden">
-          {navigation.map((link) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              className={cn(
-                "text-base font-medium transition-colors",
-                pathname === link.href
-                  ? "text-primary-600"
-                  : "text-gray-500 hover:text-gray-900"
-              )}
-            >
-              {link.name}
-            </Link>
-          ))}
-        </div>
-      </nav>
-
-      {/* Mobile menu */}
-      {mobileMenuOpen && (
-        <div className="lg:hidden">
-          <div className="fixed inset-0 z-50">
-            <div 
-              className="fixed inset-0 bg-black bg-opacity-25" 
-              onClick={() => setMobileMenuOpen(false)} 
-              onKeyDown={(e) => e.key === 'Escape' && setMobileMenuOpen(false)}
-              role="button"
-              tabIndex={0}
-              aria-label="Fermer le menu"
-            />
-            <div className="fixed top-0 right-0 w-full max-w-sm bg-white p-6 shadow-xl">
-              <div className="flex items-center justify-between">
-                <Link href="/" className="flex items-center space-x-2">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-600 text-white font-bold">
-                    T
-                  </div>
-                  <span className="text-lg font-bold text-gray-900">Targetym AI</span>
-                </Link>
-                <button
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="p-2 text-gray-500 hover:text-gray-900 transition-colors"
-                  aria-label="Fermer le menu"
-                >
-                  <XMarkIcon className="h-6 w-6" aria-hidden="true" />
-                </button>
+                <UserButton 
+                  appearance={{
+                    elements: {
+                      avatarBox: "w-8 h-8",
+                      userButtonPopoverCard: "shadow-xl border-0 mt-2",
+                      userButtonPopoverActionButton: "hover:bg-blue-50"
+                    }
+                  }}
+                />
               </div>
-              <div className="mt-6 space-y-4">
-                {navigation.map((link) => (
-                  <Link
-                    key={link.name}
-                    href={link.href}
-                    className="block text-base font-medium text-gray-900 hover:text-primary-600"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {link.name}
-                  </Link>
-                ))}
-                <hr className="my-4" />
-                {isAuthenticated ? (
-                  <>
-                    <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg">
-                      <div className="h-10 w-10 bg-primary-100 rounded-full flex items-center justify-center">
-                        <span className="text-primary-600 font-medium">
-                          {user?.first_name?.[0]}{user?.last_name?.[0]}
-                        </span>
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium text-gray-900">
-                          {user?.first_name} {user?.last_name}
-                        </p>
-                        <p className="text-xs text-gray-500">{user?.email}</p>
-                      </div>
-                    </div>
-                    <button
-                      onClick={() => {
-                        logout()
-                        setMobileMenuOpen(false)
-                      }}
-                      className="block w-full text-left text-base font-medium text-red-600 hover:text-red-500 p-2"
-                    >
-                      Déconnexion
-                    </button>
-                  </>
+            </SignedIn>
+
+            {/* Utilisateur non connecté */}
+            <SignedOut>
+              <div className="flex items-center space-x-3">
+                <SignInButton forceRedirectUrl="/dashboard">
+                  <button className="text-base font-medium text-gray-500 hover:text-gray-900 transition-colors">
+                    Connexion
+                  </button>
+                </SignInButton>
+                <SignUpButton forceRedirectUrl="/dashboard">
+                  <button className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition-colors shadow-sm">
+                    Inscription
+                  </button>
+                </SignUpButton>
+              </div>
+            </SignedOut>
+
+            {/* Bouton menu mobile */}
+            <div className="lg:hidden">
+              <button
+                type="button"
+                className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              >
+                <span className="sr-only">Ouvrir le menu</span>
+                {mobileMenuOpen ? (
+                  <XMarkIcon className="h-6 w-6" />
                 ) : (
-                  <>
-                    <Link
-                      href="/auth/login"
-                      className="block text-base font-medium text-gray-500 hover:text-gray-900"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      Connexion
-                    </Link>
-                    <Link 
-                      href="/auth/signup"
-                      className="block w-full rounded-lg bg-primary-600 px-4 py-2 text-center text-sm font-semibold text-white hover:bg-primary-700 transition-colors"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      Essai Gratuit
-                    </Link>
-                  </>
+                  <Bars3Icon className="h-6 w-6" />
                 )}
-              </div>
+              </button>
             </div>
           </div>
         </div>
-      )}
+
+        {/* Menu Mobile */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden border-t border-gray-200 py-4">
+            <div className="flex flex-col space-y-3">
+              {navigation.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`block px-3 py-2 text-base font-medium rounded-md transition-colors ${
+                    pathname === item.href
+                      ? 'text-blue-600 bg-blue-50'
+                      : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
+                  }`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {item.name}
+                </Link>
+              ))}
+              
+              {/* Actions mobile pour utilisateurs non connectés */}
+              <SignedOut>
+                <div className="pt-3 border-t border-gray-200">
+                  <SignInButton forceRedirectUrl="/dashboard">
+                    <button className="block w-full text-left px-3 py-2 text-base font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-md">
+                      Connexion
+                    </button>
+                  </SignInButton>
+                  <SignUpButton forceRedirectUrl="/dashboard">
+                    <button className="mt-2 block w-full text-left px-3 py-2 text-base font-medium bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                      Inscription
+                    </button>
+                  </SignUpButton>
+                </div>
+              </SignedOut>
+
+              {/* Profil mobile pour utilisateurs connectés */}
+              <SignedIn>
+                <div className="pt-3 border-t border-gray-200">
+                  <Link
+                    href="/profile"
+                    className="flex items-center space-x-3 px-3 py-2 text-base font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-md"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <UserCircleIcon className="h-5 w-5" />
+                    <span>Mon Profil</span>
+                  </Link>
+                </div>
+              </SignedIn>
+            </div>
+          </div>
+        )}
+      </nav>
     </header>
   )
 }
