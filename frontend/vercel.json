@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "outputDirectory": ".next",
+  "public": true,
+  "regions": ["cdg1"],
+  "env": {
+    "NEXT_PUBLIC_API_URL": {
+      "development": "http://localhost:8000/api/v1",
+      "preview": "https://targetym-ai-backend.railway.app/api/v1",
+      "production": "https://targetym-ai-backend.railway.app/api/v1"
+    }
+  }
+}
