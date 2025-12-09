@@ -1,17 +1,19 @@
-# 🎯 Targetym AI - Plateforme d'Analytics RH
+# 🎯 Targetym AI - Plateforme Marketing Intelligente
 
 [![GitHub](https://img.shields.io/badge/GitHub-annandiaye11/Targetym-blue)](https://github.com/annandiaye11/Targetym)
 [![Next.js](https://img.shields.io/badge/Next.js-14-black)](https://nextjs.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-PostgreSQL-green)](https://fastapi.tiangolo.com/)
+[![Clerk](https://img.shields.io/badge/Clerk-Auth-purple)](https://clerk.com/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)](https://www.typescriptlang.org/)
 
-**Targetym AI** est une plateforme complète d'analytics RH développée avec Next.js et FastAPI, conçue pour transformer la gestion des ressources humaines avec l'intelligence artificielle.
+**Targetym AI** est une plateforme complète d'optimisation marketing développée avec Next.js et FastAPI, conçue pour transformer vos campagnes marketing avec l'intelligence artificielle.
 
 ## 🌟 Aperçu
 
-Une solution moderne qui combine une interface utilisateur intuitive avec des analyses RH puissantes, offrant aux entreprises les outils nécessaires pour optimiser leurs équipes et prendre des décisions data-driven.
+Une solution moderne qui combine une interface utilisateur intuitive avec des analyses marketing avancées, offrant aux entreprises les outils nécessaires pour optimiser leurs campagnes et maximiser leur ROI avec l'intelligence artificielle.
 
 **🔗 Liens utiles:**
+
 - **Repository**: [github.com/annandiaye11/Targetym](https://github.com/annandiaye11/Targetym)
 - **Demo Frontend**: `http://localhost:3000` (après installation)
 - **API Documentation**: `http://localhost:8000/docs` (après installation)
@@ -19,20 +21,26 @@ Une solution moderne qui combine une interface utilisateur intuitive avec des an
 ## ✨ Fonctionnalités
 
 ### 🔐 Authentification & Sécurité
-- **JWT Authentication** avec tokens sécurisés
-- **SHA256 Password Hashing** pour la sécurité
-- **Protected Routes** avec middleware de protection
-- **Session Management** avec React Context
+
+- **Clerk Authentication** avec OAuth social (Google, GitHub)
+- **Authentification sécurisée** par email/mot de passe
+- **Routes protégées** avec middleware Next.js
+- **Gestion de sessions** automatisée
+- **Webhooks** pour synchronisation utilisateurs
 
 ### 📊 Interface Utilisateur
-- **Dashboard Dynamique** avec navigation conditionnelle
+
+- **Dashboard Marketing** avec analytics avancées
 - **Design Responsive** optimisé mobile/desktop
-- **UI Moderne** avec Tailwind CSS et Heroicons
+- **UI Moderne** avec Tailwind CSS et composants Clerk
 - **TypeScript** pour un code robuste et maintenable
+- **Localisation française** complète
 
 ### 🚀 Backend & Base de Données
+
 - **API REST** complète avec FastAPI
 - **PostgreSQL** pour la persistence des données
+- **Webhooks Clerk** pour synchronisation utilisateurs
 - **CORS** configuré pour le développement cross-origin
 - **Documentation API** automatique avec Swagger
 
@@ -42,19 +50,36 @@ Une solution moderne qui combine une interface utilisateur intuitive avec des an
 
 - **Framework**: Next.js 14 avec App Router
 - **Language**: TypeScript 5+
+- **Authentication**: Clerk avec OAuth social
 - **Styling**: Tailwind CSS 3.4
 - **Icons**: Heroicons 2.0
-- **State Management**: React Context API
+- **Localisation**: Français (frFR)
 - **HTTP Client**: Fetch API native
 
 ### Backend (FastAPI)
 
 - **Framework**: FastAPI avec Python 3.11+
 - **Database**: PostgreSQL 15+ avec psycopg2
-- **Authentication**: JWT avec python-jose
-- **Password Security**: SHA256 hashing
+- **Authentication**: Webhooks Clerk pour synchronisation
+- **Dependencies**: Poetry pour gestion des packages
 - **Server**: Uvicorn ASGI
 - **Environment**: python-dotenv pour la configuration
+
+## 🆕 Nouveautés v2.0 - Clerk Authentication
+
+### ✨ Nouvelles fonctionnalités
+
+- **🔐 Authentication moderne** avec Clerk
+- **🌐 OAuth Social** (Google, GitHub)
+- **🇫🇷 Interface française** complète
+- **⚡ Webhooks** pour synchronisation utilisateurs
+- **🛡️ Middleware** de protection des routes
+- **📱 UI responsive** avec composants Clerk
+- **🚀 Performance** optimisée avec Next.js 14
+
+### 🔄 Migration depuis JWT
+
+L'application a été entièrement migrée de l'authentification JWT vers Clerk pour une meilleure expérience utilisateur et de développement.
 
 ## 📦 Installation Rapide
 
@@ -78,7 +103,23 @@ cd Targetym
 make install
 ```
 
-#### 2️⃣ Configurer la base de données PostgreSQL
+#### 2️⃣ Configurer Clerk Authentication
+
+1. **Créer un compte Clerk** sur [dashboard.clerk.com](https://dashboard.clerk.com/)
+2. **Créer une nouvelle application** nommée "Targetym AI"
+3. **Configurer les variables d'environnement** dans `frontend/.env.local`:
+
+```env
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_votre_cle_ici
+CLERK_SECRET_KEY=sk_test_votre_cle_ici
+CLERK_WEBHOOK_SECRET=whsec_votre_cle_ici
+```
+
+4. **Optionnel**: Configurer Google/GitHub OAuth dans Clerk
+   - Google: [Guide OAuth Google](./CLERK_SOCIAL_SETUP.md)
+   - GitHub: Créer une OAuth App sur GitHub
+
+#### 3️⃣ Configurer la base de données PostgreSQL
 
 ```bash
 # Se connecter à PostgreSQL
@@ -89,6 +130,11 @@ CREATE DATABASE targetym_ai;
 CREATE USER targetym_user WITH PASSWORD 'your_secure_password';
 GRANT ALL PRIVILEGES ON DATABASE targetym_ai TO targetym_user;
 \q
+
+# Exécuter les migrations
+cd backend
+poetry run python -c "exec(open('migrations/001_create_tables.sql').read())"
+poetry run python -c "exec(open('migrations/002_add_clerk_support.sql').read())"
 ```
 
 #### 3️⃣ Configurer l'environnement backend
