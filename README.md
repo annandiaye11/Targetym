@@ -1,64 +1,187 @@
 # 🎯 Targetym AI - Plateforme d'Analytics RH
 
-**Targetym AI** est une plateforme moderne d'analytics RH développée avec Next.js et FastAPI, offrant une analyse intelligente des données de ressources humaines.
+[![GitHub](https://img.shields.io/badge/GitHub-annandiaye11/Targetym-blue)](https://github.com/annandiaye11/Targetym)
+[![Next.js](https://img.shields.io/badge/Next.js-14-black)](https://nextjs.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-PostgreSQL-green)](https://fastapi.tiangolo.com/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)](https://www.typescriptlang.org/)
 
-## 🚀 Fonctionnalités
+**Targetym AI** est une plateforme complète d'analytics RH développée avec Next.js et FastAPI, conçue pour transformer la gestion des ressources humaines avec l'intelligence artificielle.
 
-- ✅ **Interface moderne** avec Next.js 14 et Tailwind CSS
-- ✅ **Authentification sécurisée** avec JWT et SHA256
-- ✅ **Base de données PostgreSQL** pour la production
-- ✅ **API REST complète** avec FastAPI
-- ✅ **Navigation dynamique** selon l'état d'authentification
-- ✅ **Dashboard utilisateur** protégé
-- ✅ **Responsive design** optimisé mobile
+## 🌟 Aperçu
 
-## 🛠️ Technologies
+Une solution moderne qui combine une interface utilisateur intuitive avec des analyses RH puissantes, offrant aux entreprises les outils nécessaires pour optimiser leurs équipes et prendre des décisions data-driven.
 
-### Frontend
-- **Next.js 14** - Framework React avec App Router
-- **TypeScript** - Typage statique
-- **Tailwind CSS** - Framework CSS utilitaire
-- **Heroicons** - Icônes SVG
-- **React Context** - Gestion d'état pour l'authentification
+**🔗 Liens utiles:**
+- **Repository**: [github.com/annandiaye11/Targetym](https://github.com/annandiaye11/Targetym)
+- **Demo Frontend**: `http://localhost:3000` (après installation)
+- **API Documentation**: `http://localhost:8000/docs` (après installation)
 
-### Backend
-- **FastAPI** - Framework web Python moderne
-- **PostgreSQL** - Base de données relationnelle
-- **JWT** - Authentification par tokens
-- **SHA256** - Hachage sécurisé des mots de passe
-- **Uvicorn** - Serveur ASGI
+## ✨ Fonctionnalités
 
-## 🏗️ Architecture
+### 🔐 Authentification & Sécurité
+- **JWT Authentication** avec tokens sécurisés
+- **SHA256 Password Hashing** pour la sécurité
+- **Protected Routes** avec middleware de protection
+- **Session Management** avec React Context
+
+### 📊 Interface Utilisateur
+- **Dashboard Dynamique** avec navigation conditionnelle
+- **Design Responsive** optimisé mobile/desktop
+- **UI Moderne** avec Tailwind CSS et Heroicons
+- **TypeScript** pour un code robuste et maintenable
+
+### 🚀 Backend & Base de Données
+- **API REST** complète avec FastAPI
+- **PostgreSQL** pour la persistence des données
+- **CORS** configuré pour le développement cross-origin
+- **Documentation API** automatique avec Swagger
+
+## 🛠️ Stack Technologique
 
 ### Frontend (Next.js 14)
-- **Framework** : Next.js 14 avec App Router
-- **Langage** : TypeScript
-- **Styles** : Tailwind CSS
-- **Composants** : Composants custom avec Heroicons
-- **Authentification** : Context API avec hooks personnalisés
-- **Déploiement** : Vercel
+
+- **Framework**: Next.js 14 avec App Router
+- **Language**: TypeScript 5+
+- **Styling**: Tailwind CSS 3.4
+- **Icons**: Heroicons 2.0
+- **State Management**: React Context API
+- **HTTP Client**: Fetch API native
 
 ### Backend (FastAPI)
-- **Framework** : FastAPI avec Python 3.11+
-- **Base de données** : PostgreSQL avec SQLAlchemy
-- **Authentification** : JWT avec python-jose
-- **Tâches asynchrones** : Celery + Redis
-- **Emails** : Resend API
-- **Déploiement** : Railway
 
-## 🛠️ Installation et Développement
+- **Framework**: FastAPI avec Python 3.11+
+- **Database**: PostgreSQL 15+ avec psycopg2
+- **Authentication**: JWT avec python-jose
+- **Password Security**: SHA256 hashing
+- **Server**: Uvicorn ASGI
+- **Environment**: python-dotenv pour la configuration
+
+## 📦 Installation Rapide
 
 ### Prérequis
 
-- Node.js 18+
-- Python 3.11+
-- PostgreSQL 14+
-- Redis
-- Poetry (pour Python)
+- **Node.js** 18+ ([Download](https://nodejs.org/))
+- **Python** 3.11+ ([Download](https://python.org/))
+- **PostgreSQL** 15+ ([Download](https://postgresql.org/))
+- **Git** ([Download](https://git-scm.com/))
 
-### Configuration Rapide
+### 🚀 Installation en 3 étapes
 
-#### 1. Frontend (Next.js)
+#### 1️⃣ Cloner et configurer
+
+```bash
+# Cloner le repository
+git clone https://github.com/annandiaye11/Targetym.git
+cd Targetym
+
+# Installer toutes les dépendances (frontend + backend)
+make install
+```
+
+#### 2️⃣ Configurer la base de données PostgreSQL
+
+```bash
+# Se connecter à PostgreSQL
+sudo -u postgres psql
+
+# Créer la base de données et l'utilisateur
+CREATE DATABASE targetym_ai;
+CREATE USER targetym_user WITH PASSWORD 'your_secure_password';
+GRANT ALL PRIVILEGES ON DATABASE targetym_ai TO targetym_user;
+\q
+```
+
+#### 3️⃣ Configurer l'environnement backend
+
+```bash
+# Copier le fichier d'environnement
+cp backend/.env.example backend/.env
+
+# Éditer les variables d'environnement
+nano backend/.env
+```
+
+**Contenu du fichier `.env` :**
+
+```env
+DATABASE_URL=postgresql://targetym_user:your_secure_password@localhost:5432/targetym_ai
+SECRET_KEY=your-super-secret-jwt-key-here-change-this-in-production
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+```
+
+## 🎯 Lancement de l'application
+
+### Option 1: Démarrage complet (Recommandé)
+
+```bash
+# Lance frontend + backend simultanément
+make dev
+```
+
+**Accès après démarrage :**
+- 🌐 **Frontend**: http://localhost:3000
+- 🔧 **Backend API**: http://localhost:8000  
+- 📚 **Documentation API**: http://localhost:8000/docs
+
+### Option 2: Démarrage séparé
+
+```bash
+# Terminal 1 - Backend uniquement
+make backend
+
+# Terminal 2 - Frontend uniquement  
+make frontend
+```
+
+### Option 3: Scripts directs
+
+```bash
+# Backend avec script bash
+cd backend && ./start.sh
+
+# Ou avec options avancées
+cd backend && ./run.sh dev
+```
+
+## 🎮 Utilisation
+
+### 1️⃣ Créer un compte
+
+1. Aller sur http://localhost:3000
+2. Cliquer sur **"S'inscrire"** dans la navigation
+3. Remplir le formulaire d'inscription
+4. Se connecter avec les identifiants créés
+
+### 2️⃣ Explorer l'application
+
+- **Dashboard** - Interface utilisateur principale (après connexion)
+- **Solutions** - Découvrir les fonctionnalités d'analytics RH
+- **Cas d'utilisation** - Exemples concrets d'utilisation
+- **Tarification** - Plans disponibles (toggle mensuel/annuel)
+
+### 3️⃣ API Testing
+
+Utiliser la documentation interactive : http://localhost:8000/docs
+
+## 📁 Structure du projet
+
+```
+Targetym/
+├── 📂 frontend/              # Application Next.js
+│   ├── 📂 src/
+│   │   ├── 📂 app/           # Pages et routes
+│   │   ├── 📂 components/    # Composants React  
+│   │   └── 📂 contexts/      # Gestion d'état
+│   └── 📄 package.json
+├── 📂 backend/               # API FastAPI
+│   ├── 📄 main_postgresql.py # Application principale
+│   ├── 📄 requirements.txt   # Dépendances Python
+│   └── 📄 .env              # Configuration
+├── 📄 Makefile              # Commandes de gestion
+├── 📄 README.md             # Cette documentation
+└── 📄 .gitignore            # Fichiers ignorés par Git
+```
 
 ```bash
 cd frontend
